@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 require 'rugged'
 
-describe "Gitlapse" do
+describe "Ruggy" do
   before do
     #`rm -rf  DATA` #NOTE flush all previous test data
     @env 		= Hash.new
@@ -12,13 +12,18 @@ describe "Gitlapse" do
   after do
   end
 
-  #TODO to be refactored into Mushin::Ruggy ext
   it "take clones from a repo clone_url to a local_repo_path" do
-    Rugged::Repository.clone_at(@clone_url, @local_repo_path, {
-      transfer_progress: lambda { |total_objects, indexed_objects, received_objects, local_objects, total_deltas, indexed_deltas, received_bytes|
-	print("\r total_objects: #{total_objects}, indexed_objects: #{indexed_objects}, received_objects: #{received_objects}, local_objects: #{local_objects}, total_deltas: #{total_deltas}, indexed_deltas: #{indexed_deltas}, received_bytes: #{received_bytes}")
-      }
-    })
+
+    @params = {:slug => @slug}
+
+    @env[:host] = Hash.new
+    @env[:host][@slug.to_sym] = Hash.new 
+    @env[:host][@slug.to_sym][:clone_url] = @clone_url
+
+    p @env
+
+    #env[:slug][:repo]
+
     File.directory?(@local_repo_path).must_equal true 
   end
 
